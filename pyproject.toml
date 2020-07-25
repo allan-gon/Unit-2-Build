@@ -18,9 +18,11 @@ plotly = "^4.9.0"
 beautifulsoup4 = "^4.9.1"
 selenium = "^3.141.0"
 jupyterlab = "^2.2.0"
+mal-scraper = "^0.3.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+pylint = "^2.5.3"
 
 [build-system]
 requires = ["poetry>=0.12"]
