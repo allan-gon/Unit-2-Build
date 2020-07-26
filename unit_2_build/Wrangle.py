@@ -68,7 +68,7 @@ def wrangle(data):
     df = data.copy()
     #Some dropping
     col_drop = [
-        "title_english",'title_synonyms','image_url',
+        "title_japanese","title_english",'title_synonyms','image_url',
         'opening_theme','ending_theme','anime_id','background','premiered',
         'broadcast','producer','licensor','aired_string','aired','score',
         'scored_by','members','favorites','status','airing'
