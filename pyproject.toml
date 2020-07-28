@@ -19,7 +19,8 @@ beautifulsoup4 = "^4.9.1"
 selenium = "^3.141.0"
 jupyterlab = "^2.2.0"
 mal-scraper = "^0.3.0"
-xgboost = "^1.1.1"
+xgboost = "1.0.0"
+dash = "^1.14.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
