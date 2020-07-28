@@ -119,7 +119,43 @@ def wrangle(data):
     df.drop(['rank','popularity','target'],axis=1,inplace=True)
     return df
 
-
+def predict(model,title,types,source,episodes,duration,rating,studio,num_related,genres):
+    hentai = ['Yaoi','Yuri','Ecchi','Harem','Hentai','Josei','Shounen Ai','Shoujo Ai','Romance']
+    sports = ['Martial Arts','Sports']
+    youth = ['Kids','Seinen','Shoujo','Shounen','Super Power','Slice of Life','School','Action']
+    adv_psych = ['Adventure','Mystery','Psychological','Dementia']
+    drama_thrill = ['Drama','Horror','Thriller']
+    fant_scien = ['Demons','Fantasy','Game','Magic','Supernatural','Vampire','Sci-Fi','Cars','Space']
+    comedy = ['Comedy','Parody']
+    military = ['Military','Police','Mecha']
+    misc = ['Historical','Samurai','Music']
+    
+    # make dataframe
+    data = {
+        'type':[types],'source':[source],'episodes':[episodes],
+        'duration':[duration],'rating':[rating],'studio':[studio],
+        'num_related':[num_related],'genre':[genres]
+    }
+    df = pd.DataFrame.from_dict(data)
+    
+    # fix genre
+    df['hentai/romance'] = df.genre.str.contains('|'.join(hentai))
+    df['sports'] = df.genre.str.contains('|'.join(sports))
+    df['youth'] = df.genre.str.contains('|'.join(youth))
+    df['adventure/psychological'] = df.genre.str.contains('|'.join(adv_psych))
+    df['drama'] = df.genre.str.contains('|'.join(drama_thrill))
+    df['fantasy/sci-fi'] = df.genre.str.contains('|'.join(fant_scien))
+    df['comedy'] = df.genre.str.contains('|'.join(comedy))
+    df['military'] = df.genre.str.contains('|'.join(military))
+    df['misc'] = df.genre.str.contains('|'.join(misc))
+    df['Unknown'] = df.genre.str.contains('unknown')
+    
+    # dropping genre because ohe above
+    df.drop('genre',axis=1,inplace=True)
+    
+    # predict
+    pred = model.predict(df)
+    return f"{title} is a {pred[0]} candidate to animate..."
 
 if __name__ == '__main__':
     wrangle(df)
