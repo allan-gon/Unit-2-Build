@@ -158,4 +158,4 @@ def predict(model,title,types,source,episodes,duration,rating,studio,num_related
     return f"{title} is a {pred[0]} candidate to animate..."
 
 if __name__ == '__main__':
-    wrangle(df)
+    pass
