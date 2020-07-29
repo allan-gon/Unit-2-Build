@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output, State
 import pickle
 from Wrangle import predict
 
-with open('unit_2_build/Models/tuned_forest','rb') as myfile:
+with open('the_model_code/Models/tuned_forest','rb') as myfile:
     forest = pickle.load(myfile)
 
 app = dash.Dash()
@@ -173,109 +173,23 @@ left = html.Div(
 
 @app.callback(
     Output('Prediction','children'),
-    [Input('Title','value'),
-    Input('Type','value'),
-    Input('Source','value'),
-    Input('Episodes','value'),
-    Input('Duration','value'),
-    Input('Rating','value'),
-    Input('Studio','value'),
-    Input('Related','value'),
-    Input('Genre','value')])
-def get_vars(title,types,source,episodes,duration,rating,studio, num_related, genres):
+    [Input('Button','n_clicks')],
+    state=[State('Title','value'),
+    State('Type','value'),
+    State('Source','value'),
+    State('Episodes','value'),
+    State('Duration','value'),
+    State('Rating','value'),
+    State('Studio','value'),
+    State('Related','value'),
+    State('Genre','value')])
+def get_vars(n_clicks,title,types,source,episodes,duration,rating,studio, num_related, genres):
     genre = ", ".join(genres)
     prediction = predict(forest,title,types,source,episodes,duration,
     rating,studio, num_related, genre)
     return prediction
 
-#     prediction = predict(forest,title,types,source,episodes,duration,
-#     rating,studio, num_related, genres)
-
-# @app.callback(
-#     Output('intermediate_value','children'),
-#     [Input('Type','value'),Input('intermediate_value','children')])
-# def get_type(value,children):
-#     return f"{children};{value}"
-
-# @app.callback(
-#     Output('intermediate_value','children'),
-#     [Input('Duration','value'),Input('intermediate_value','children')])
-# def get_duration(value,children):
-#     return f"{children},{value}"
-
-# @app.callback(
-#     Output('intermediate_value','children'),
-#     [Input('Source','value'),Input('intermediate_value','children')])
-# def get_source(value,children):
-#     return f"{children},{value}"
-
-# @app.callback(
-#     Output('intermediate_value','children'),
-#     [Input('Rating','value'),Input('intermediate_value','children')])
-# def get_rating(value,children):
-#     return f"{children};{value}"
-
-# @app.callback(
-#     Output('intermediate_value','children'),
-#     [Input('Studio','value'),Input('intermediate_value','children')])
-# def get_studio(value):
-#     return f"{children};{value}"
-
-# @app.callback(
-#     Output('intermediate_value','children'),
-#     [Input('Episodes','value'),Input('intermediate_value','children')])
-# def get_episodes(value,children):
-#     return f"{children};{value}"
-
-# @app.callback(
-#     Output('intermediate_value','children'),
-#     [Input('Related','value'),Input('intermediate_value','children')])
-# def get_related(value,children):
-#     return f"{children};{value}"
-
-# @app.callback(
-#     Output('intermediate_value','children'),
-#     [Input('Genre','value'),Input('intermediate_value','children')])
-# def get_genre(value,children):
-#     return f"{children};{value}"
-
-# @app.callback(
-#     Output('intermediate_value','children'),
-#     [Input('Title','value')])
-# def get_title(value):
-#     return value
-
-# @app.callback(
-#     Output(component_id='Prediction',component_property='children'),
-#     [Input('Button','n_clicks'),Input('intermediate_value','children')])
-# def make_pred(children):
-#     get_title()
-#     get_type()
-#     get_source()
-#     get_episodes()
-#     get_duration()
-#     get_rating()
-#     get_studio()
-#     get_related()
-#     get_genre()
-
-#     title,types,source,episodes,duration,rating,studio,num_related,genres = children.split(';')
-    
-#     episodes = int(episodes)
-#     num_related = int(num_related)
-
-#     prediction = predict(forest,title,types,source,episodes,duration,
-#     rating,studio, num_related, genres)
-#     return prediction
-
 app.layout = html.Div(left,style={'width':'50%'})
 
 if __name__ == "__main__":
     app.run_server(debug=True)
-
-# i thought if i save title in a hidden div then get that div and add to
-# it a type, then save it, then add to it a source, then save etc
-# at the end when the run model button is pressed i can access the div
-# and split() then tuple unpack then feed to model and make prediction
-
-# Good idea but they dont like no output...
