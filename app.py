@@ -3,11 +3,12 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
+
 import pickle
 from Wrangle import predict
 
-with open('the_model_code/Models/tuned_forest','rb') as myfile:
-    forest = pickle.load(myfile)
+with open('the_model_code/Models/tuned_xgb','rb') as myfile:
+    model = pickle.load(myfile)
 
 app = dash.Dash()
 
@@ -162,11 +163,13 @@ left = html.Div(
     ),
     html.Br(),
     html.Br(),
+    html.Label('Enter the title: '),
     dcc.Input(id='Title',value='None',type='text',placeholder='Enter the title'),
     html.Br(),
-    html.Label("What the model thinks"),
+    html.Header("What the model thinks"),
     html.Br(),
     html.Label(id='Prediction',children="Nothing for now..."),
+    html.Br(),
     html.Br(),
     html.Button('Run Model',id='Button',n_clicks=0)
     ])
@@ -184,10 +187,13 @@ left = html.Div(
     State('Related','value'),
     State('Genre','value')])
 def get_vars(n_clicks,title,types,source,episodes,duration,rating,studio, num_related, genres):
-    genre = ", ".join(genres)
-    prediction = predict(forest,title,types,source,episodes,duration,
-    rating,studio, num_related, genre)
-    return prediction
+    if n_clicks == 0:
+        return "Nothing for now..."
+    else:
+        genres = ", ".join(genres)
+        pred = predict(model,title,types,source,episodes,duration,rating,studio, num_related, genres)
+        return pred
+
 
 app.layout = html.Div(left,style={'width':'50%'})
 
